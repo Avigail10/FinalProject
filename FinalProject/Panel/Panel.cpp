@@ -25,6 +25,7 @@ void Panel::getAllControls(vector<Control *> &cont) {
 
 	while (i < cSize) {
 		cont.push_back(controls[i]);
+		i++;
 	}
 }
 
