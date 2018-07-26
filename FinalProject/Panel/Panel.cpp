@@ -29,6 +29,33 @@ void Panel::getAllControls(vector<Control *> &cont) {
 	}
 }
 
+void Panel::draw(Graphics &g, int x, int y, size_t layer) {
+
+	int i = 0, cSize = controls.size();
+
+	if (!isVisible()) { 
+		return;
+	}
+
+	if (layer == getLayer()) {
+		Control::draw(g, getLeft(), getTop(), layer);
+	}
+
+	g.setBackground(g.convertToColor(getBackGround()));
+	g.setForeground(g.convertToColor(getForeground()));
+
+	while (i < cSize) {
+
+		g.moveTo(controls[i]->getBodyLeft(), controls[i]->getBodyTop());
+		controls[i]->draw(g, controls[i]->getBodyLeft(), controls[i]->getBodyTop(), layer);
+	
+		++i;
+	}
+	
+	g.resetColors();
+}
+
+
 Panel::~Panel() {
 	int cSize = controls.size();
 	for (int i = 0; i < cSize; i++) {
