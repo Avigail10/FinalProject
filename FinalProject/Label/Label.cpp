@@ -18,7 +18,6 @@ string Label::getValue() {
 void Label::setValue(string val) {
     value = centerlizeTxt(getWidth() - 2, val);
 }
-
 string Label::centerlizeTxt(int width, string value) {
     
     string txt;
@@ -48,4 +47,3 @@ void Label::draw(Graphics &g, int x , int y, size_t layer) {
 Label::~Label()
 {
 }
-
