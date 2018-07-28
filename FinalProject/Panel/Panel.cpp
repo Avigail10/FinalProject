@@ -29,6 +29,46 @@ void Panel::getAllControls(vector<Control *> &cont) {
 	}
 }
 
+bool Panel::addControl(Control *control, short x, short y) {
+
+	control->setLocation({ x , y });
+
+	if (validSpace(control)) {
+		controls.push_back(control);
+		return true;
+	}
+
+	return false;
+}
+
+bool Panel::validSpaceWithControllers(Control* ctrl) {
+	
+	bool tmpflag = true;
+	int cSize = controls.size();
+
+	for (int i = 0; i < cSize; i++) {
+		if (!(controls[i]->getLayer() - CONSTANT)) continue;
+		if (!controls[i]->validSpace(ctrl)) {
+			tmpflag = false;
+			break;
+		}
+	}
+
+	return tmpflag;
+
+}
+
+void Panel::mousePressed(short x, short y, bool isLeft) {
+
+	if (x < this->getLeft() || (x > this->getLeft() + this->getWidth())) return;
+	if (y < this->getTop() || (y > this->getTop() + this->getHeight())) return;
+
+	int size = controls.size();
+	for (int i = 0; i < size; i++) {
+		controls[i]->mousePressed(x, y, isLeft);
+	}
+}
+
 void Panel::draw(Graphics &g, int x, int y, size_t layer) {
 
 	int i = 0, cSize = controls.size();
@@ -55,6 +95,30 @@ void Panel::draw(Graphics &g, int x, int y, size_t layer) {
 	g.resetColors();
 }
 
+void Panel::setLocation(COORD coord) {
+
+	COORD crd = {getBodyLeft(),getBodyTop()};
+	int cSize = controls.size();
+
+	Control::setLocation(coord);
+
+	for (size_t i = 0; i < cSize; i++) {
+		controls[i]->setLocation({ coord.X + controls[i]->getBodyLeft() - crd.X, coord.Y + controls[i]->getBodyTop() - crd.Y });
+	}
+
+}
+
+void Panel::closeButtonMessage(){
+	isMsgBoxOpen = false;
+}
+
+void Panel::openButtonMessage() {
+	isMsgBoxOpen = true;
+}
+
+bool Panel::getMsgOpen(){
+	return isMsgBoxOpen;
+}
 
 Panel::~Panel() {
 	int cSize = controls.size();
