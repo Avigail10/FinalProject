@@ -27,3 +27,35 @@ MsgBox::MsgBox(int height, int width) : Panel(height, width)
 	addControl(text,1,4);
 	addControl(button, (width / 4), height-4);
 }
+
+void MsgBox::mousePressed(short x, short y, bool isLeft) {
+	short left = this->getLeft(), top = this->getTop(), width = this->getWidth(), height = this->getHeight();
+	if (x < left || (x > left + width) || y < top || (y > top + height)) 
+	{
+		if (isVisible()) hide();
+	}
+
+	controls[2]->mousePressed(x, y, isLeft);
+}
+
+void MsgBox::setText(string text) {
+	static_cast<Label*>(controls[1])->setValue(text);
+}
+
+void MsgBox::setTitle(string text) {
+	static_cast<Label*>(controls[0])->setValue(text);
+}
+
+void MsgBox::keyDown(WORD click, CHAR chr){
+	if (click == VK_RETURN) hide();
+}
+
+void MsgBox::show(){
+	Control::show();
+	openButtonMessage();
+}
+
+void MsgBox::hide(){
+	Control::hide();
+	closeButtonMessage();
+}
