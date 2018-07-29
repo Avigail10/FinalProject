@@ -3,29 +3,42 @@
 
 MsgBox::MsgBox(int height, int width) : Panel(height, width)
 {
+	result = NULL;
 	setLayer(2);
 	isfocusable = false;
 	
-	Button *button = new Button(width / 2, Label::centerlizeTxt(width/2, "Send"));
+	Button *accept = new Button(width/4, Label::centerlizeTxt(width/4, "Accept"));
+	Button *decline = new Button(width/4, Label::centerlizeTxt(width/4, "Decline"));
 
-	Label *title = new Label(width - 2, "Thanks");
-	Label *text = new Label(width - 2, "Bye Bye!");
+	Label *title = new Label(width-2, "Form Confirmation");
+	Label *text = new Label(width-2, "Do u accept the terms?");
+	
+	AcceptListener  *acceptListener = new AcceptListener(*this);	
+	DeclineListener *declineListener = new DeclineListener(*this);
+	
+	title->setLayer(2);	
+	title->setBackGround(BackgroundColor::Blue);
 
-	CloseListener *closeListener = new CloseListener(*this);
-
-	button->addListener(*closeListener);
-
-	title->setLayer(2);
 	text->setLayer(2);
-	button->setLayer(2);
+	text->setBackGround(BackgroundColor::Blue);
 
-	title->setBorder(BorderType::Single);
-	text->setBorder(BorderType::Single);
-	button->setBorder(BorderType::Single);
+	accept->addListener(*acceptListener);
+	accept->setLayer(2);
+	accept->setBorder(BorderType::Single);
+	accept->setBackGround(BackgroundColor::Green);	
+	decline->addListener(*declineListener);
+	decline->setLayer(2);
+	decline->setBorder(BorderType::Single);
+	decline->setBackGround(BackgroundColor::Red);
 
 	addControl(title, 1,1);
-	addControl(text,1,4);
-	addControl(button, (width / 4), height-4);
+	addControl(text,1,4);	
+	addControl(accept, 3, height-5);
+	addControl(decline, width-3-(width/4), height-5);
+}
+
+void MsgBox::setResult(bool b) {
+	result = b;
 }
 
 void MsgBox::mousePressed(short x, short y, bool isLeft) {
@@ -35,7 +48,11 @@ void MsgBox::mousePressed(short x, short y, bool isLeft) {
 		if (isVisible()) hide();
 	}
 
-	controls[2]->mousePressed(x, y, isLeft);
+	for (int i = 2; i < controls.size(); i++) {
+		controls[i]->mousePressed(x, y, isLeft);
+	}		
+
+	//after pressed one of the buttons: this->result will set to TRUE or FALSE accordingly.
 }
 
 void MsgBox::setText(string text) {
@@ -59,3 +76,4 @@ void MsgBox::hide(){
 	Control::hide();
 	closeButtonMessage();
 }
+

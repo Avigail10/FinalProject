@@ -14,6 +14,11 @@ void Button::draw(Graphics& graphics, int x, int y, size_t layer){
 }
 
 void Button::mousePressed(short x, short y, bool isLeft){
+	int w = getLeft();
+	int h = getTop();
+	int width = getWidth();
+	int height = getHeight();
+
 	if (clickable && 
 		x > getLeft() && 
 		x < getLeft() + getWidth() &&
@@ -21,7 +26,7 @@ void Button::mousePressed(short x, short y, bool isLeft){
 		y < getTop() + getHeight()){
 
 		listener->mousePressed(*this, x, y, isLeft);
-	}
+	}	
 }
 
 void Button::keyDown(WORD click, CHAR chr){

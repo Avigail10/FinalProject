@@ -49,7 +49,9 @@ void TextBox::keyDown(WORD w, CHAR c) {
 		case VK_UP:
 		case VK_RETURN:
 			break;
-
+		case VK_SHIFT:
+			break;
+		
 		case VK_RIGHT:	
 			moveRight();	
 			break;
@@ -110,7 +112,7 @@ void TextBox::deleteLeft(){
 		return;
 	}
 
-	value.erase(curserPosition - CONSTANT, 1);
+	value.erase(curserPosition - 2, 1);
 	moveLeft();
 }
 
